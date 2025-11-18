@@ -1,54 +1,41 @@
 // module of NEO
 
-module NEO #(
+module NEOcalculator #(
     parameter N = 8,  // N-bits wide
     parameter M = 16  // M locations
     )(
     input logic Clk,
     input logic reset,
-    input logic signed [N-1:0] rdata,
-    output logic [$clog2(M):0] raddr,
-    output logic [$clog2(M):0] waddr,
-    output logic signed [N-1:0] wdata
 );
 
-logic signed [N-1:0] xn_prev, xn_curr, xn_next;
-logic [$clog2(M):0] counter;
+timeunit 1ns; timeprecision 10ps;
 
-always_ff @(posedge Clk, negedge reset) begin
-    if (!reset) begin
-        counter <= '0;
-        xn_prev <= '0;
-        xn_curr <= '0;
-        xn_next <= '0;
-    end else begin
-        // Simple processing: shift data through registers
-        
+logic reset;
+logic signed [N-1:0] rdata, wdata;
+logic [$clog2(M):0] raddr, waddr;
 
-        xn_curr <= xn_next;
-        xn_prev <= xn_curr;
+Memory #(
+    .N(N),
+    .M(M)
+) memory1 (
+    .Clk(Clk),
+    .reset(reset),
+    .wdata(wdata),
+    .raddr(raddr),
+    .waddr(waddr),
+    .rdata(rdata)
+);
 
-        if (counter == { $clog2(M){1'b1} }) begin
-            counter <= counter;
-        end else begin
-            counter <= counter + 1;
-        end
+NEOcalculator #(
+    .N(N),
+    .M(M)
+) calculator1 (
+    .Clk(Clk),
+    .reset(reset),
+    .rdata(rdata),
+    .raddr(raddr),
+    .waddr(waddr),
+    .wdata(wdata)
+);
 
-    end
-end
-
-always_comb begin
-    xn_next = rdata;
-    if (counter >= 1) begin
-        waddr = counter - 1;
-    end else begin
-        waddr = '0;
-    end
-    raddr = counter;
-    wdata = xn_curr * xn_curr - xn_next * xn_prev;
-    
-
-
-end
-
-endmodule
+endmodule 

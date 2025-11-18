@@ -12,6 +12,8 @@ module Memory #(
     output logic signed [N-1:0] rdata
 );
 
+timeunit 1ns; timeprecision 10ps;
+
 logic signed [N-1:0] mem [0:M-1];
 
 always_ff @(posedge Clk, negedge reset) begin
