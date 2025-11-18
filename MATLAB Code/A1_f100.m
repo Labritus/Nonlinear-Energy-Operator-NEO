@@ -3,7 +3,7 @@ clear; clc; close all;
 %% ==== 参数 ====
 phi = 0; % 相位
 n = 2; % 测试n个周期
-N = 8;
+N = 16;
 halfN = N/2;
 M = 16; % 测试n个周期 M = n * (fs/f) = 2*n fs>=2*f
 Afs = 3; % 上限按振幅为3来计算
@@ -70,10 +70,42 @@ for k = 1:3
     fclose(fid);
 
 
+    %% ==== 画图 ====
+    % ===== 连续波形 =====
+    figure;        % <--- 关键：每次循环重新开一个图窗口
+    hold on;
+
+    t_cont = linspace(0, t(end), 2000);
+    x_cont = A * sin(2*pi*f*t_cont + phi);
+
+    plot(t_cont, x_cont, 'LineWidth', 1.8); 
+
+
+    % ===== 量化后离散采样点（反推成有符号 + 映射回实际幅度）=====
+
+    % 反推补码为有符号数
+    x_q_signed = x_q;
+    neg_idx = x_q >= 2^(halfN-1);     % halfN 位补码的符号位为1 → negative
+    x_q_signed(neg_idx) = x_q_signed(neg_idx) - 2^halfN;
+
+    % 映射回真实幅度
+    x_q_float = x_q_signed * (Afs / MAX);
+
+    stem(t, x_q_float, 'filled', 'r', 'LineWidth', 1.2);
+
+    % ===== 图属性 =====
+    title(sprintf("A=%d, f=%d Hz, phi=%d°", A, f, phi));
+    xlabel("Time (s)");
+    ylabel("Amplitude");
+    legend("Continuous", "Quantized Sampled");
+    grid on;
+    set(gca, 'FontSize', 12);
 
 
 
 
-    
+
+
+
 end
 

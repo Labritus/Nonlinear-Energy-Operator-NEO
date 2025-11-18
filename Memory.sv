@@ -1,7 +1,7 @@
 // model of Memory
 
 module Memory #(
-    parameter N = 8,  // N-bits wide
+    parameter N = 16,  // N-bits wide
     parameter M = 16  // M locations 111
     )(
     input logic Clk,

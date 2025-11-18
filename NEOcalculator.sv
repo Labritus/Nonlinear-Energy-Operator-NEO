@@ -1,7 +1,7 @@
 // module of NEOcalculator
 
 module NEOcalculator #(
-    parameter N = 8,  // N-bits wide
+    parameter N = 16,  // N-bits wide
     parameter M = 16  // M locations
     )(
     input logic Clk,
