@@ -6,13 +6,13 @@ module NEO #(
     )(
     input logic Clk,
     input logic reset,
-    input logic [N-1:0] rdata,
+    input logic signed [N-1:0] rdata,
     output logic [$clog2(M)-1:0] raddr,
     output logic [$clog2(M)-1:0] waddr,
-    output logic [N-1:0] wdata
+    output logic signed [N-1:0] wdata
 );
 
-logic [N-1:0] xn_prev, xn_curr, xn_next;
+logic signed [N-1:0] xn_prev, xn_curr, xn_next;
 logic [$clog2(M)-1:0] counter;
 
 always_ff @(posedge Clk, negedge reset) begin
@@ -25,17 +25,41 @@ always_ff @(posedge Clk, negedge reset) begin
         xn_curr <= '0;
         xn_next <= '0;
     end else begin
-        // Example 
         // Simple processing: shift data through registers
-        xn_next <= rdata; 
-        xn_curr <= xn_next;
-        xn_prev <= xn_curr; 
         
+
+        xn_curr <= xn_next;
+        xn_prev <= xn_curr;
+        counter <= counter + 1;
+
+        if (counter >= 2 ) begin
+
+            raddr <= raddr + 1;
+            waddr <= waddr + 1;
+            wdata <= xn_curr;
+            
+        end
+
+always_comb begin
+    // calculate wdata based on the formula
+    if (counter >= 2) begin
+        wdata = xn_curr * xn_curr - xn_next * xn_prev;
+        waddr = counter - 1;
+    end else begin
+        wdata = '0; // No valid data yet
+    end
+
+    xn_next <= rdata;
+    
+    // address
+    raddr = counter < M ? counter : M - 1;
+    waddr = counter < M ? counter : M - 1;
+
+    
+
           
 
-        // Update addresses and data for Memory module
-        raddr <= raddr + 1;
-        waddr <= waddr + 1;
-        wdata <= xn_curr;
+
+
     end
 end

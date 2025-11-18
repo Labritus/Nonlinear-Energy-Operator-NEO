@@ -6,13 +6,14 @@ module Memory #(
     )(
     input logic Clk,
     input logic reset,
-    input logic [N-1:0] wdata,
+    input logic signed [N-1:0] wdata,
     input logic [$clog2(M)-1:0] raddr,
     input logic [$clog2(M)-1:0] waddr,
-    output logic [N-1:0] rdata
+    output logic signed [N-1:0] rdata
 );
 
-logic [N-1:0] mem [0:M-1];
+logic signed [N-1:0] mem [0:M-1];
+// logic signed [N-1:0] wdata_buffer; // buffer for write data
 
 always_ff @(posedge Clk, negedge reset) begin
     if (!reset) begin
@@ -20,11 +21,13 @@ always_ff @(posedge Clk, negedge reset) begin
         for (int i = 0; i < M; i++) begin
             mem[i] <= '0;
         end
+        wdata_buffer = '0;
     end else begin
-        // write data to memory
-        mem[waddr] <= wdata;
+         // Write data to memory only if waddr != 0 or wdata != 0
+        if (!(waddr == 0 && wdata == 0)) begin
+            mem[waddr] <= wdata;
+        end
     end
-end
 
 always_ff @(posedge Clk) begin
     // read data from memory
