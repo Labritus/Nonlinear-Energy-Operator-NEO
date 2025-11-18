@@ -13,9 +13,11 @@ module NEO #(
 );
 
 logic [N-1:0] xn_prev, xn_curr, xn_next;
+logic [$clog2(M)-1:0] counter;
 
 always_ff @(posedge Clk, negedge reset) begin
     if (!reset) begin
+        counter <= '0;
         raddr <= '0;
         waddr <= '0;
         wdata <= '0;
