@@ -50,7 +50,7 @@ always_comb begin
     end
 
     xn_next <= rdata;
-    
+
     // address
     raddr = counter < M ? counter : M - 1;
     waddr = counter < M ? counter : M - 1;

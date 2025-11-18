@@ -13,7 +13,6 @@ module Memory #(
 );
 
 logic signed [N-1:0] mem [0:M-1];
-// logic signed [N-1:0] wdata_buffer; // buffer for write data
 
 always_ff @(posedge Clk, negedge reset) begin
     if (!reset) begin
