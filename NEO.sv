@@ -7,20 +7,17 @@ module NEO #(
     input logic Clk,
     input logic reset,
     input logic signed [N-1:0] rdata,
-    output logic [$clog2(M)-1:0] raddr,
-    output logic [$clog2(M)-1:0] waddr,
+    output logic [$clog2(M):0] raddr,
+    output logic [$clog2(M):0] waddr,
     output logic signed [N-1:0] wdata
 );
 
 logic signed [N-1:0] xn_prev, xn_curr, xn_next;
-logic [$clog2(M)-1:0] counter;
+logic [$clog2(M):0] counter;
 
 always_ff @(posedge Clk, negedge reset) begin
     if (!reset) begin
         counter <= '0;
-        raddr <= '0;
-        waddr <= '0;
-        wdata <= '0;
         xn_prev <= '0;
         xn_curr <= '0;
         xn_next <= '0;
@@ -30,36 +27,28 @@ always_ff @(posedge Clk, negedge reset) begin
 
         xn_curr <= xn_next;
         xn_prev <= xn_curr;
-        counter <= counter + 1;
 
-        if (counter >= 2 ) begin
-
-            raddr <= raddr + 1;
-            waddr <= waddr + 1;
-            wdata <= xn_curr;
-            
+        if (counter == { $clog2(M){1'b1} }) begin
+            counter <= counter;
+        end else begin
+            counter <= counter + 1;
         end
-
-always_comb begin
-    // calculate wdata based on the formula
-    if (counter >= 2) begin
-        wdata = xn_curr * xn_curr - xn_next * xn_prev;
-        waddr = counter - 1;
-    end else begin
-        wdata = '0; // No valid data yet
-    end
-
-    xn_next <= rdata;
-
-    // address
-    raddr = counter < M ? counter : M - 1;
-    waddr = counter < M ? counter : M - 1;
-
-    
-
-          
-
-
 
     end
 end
+
+always_comb begin
+    xn_next = rdata;
+    if (counter >= 1) begin
+        waddr = counter - 1;
+    end else begin
+        waddr = '0;
+    end
+    raddr = counter;
+    wdata = xn_curr * xn_curr - xn_next * xn_prev;
+    
+
+
+end
+
+endmodule

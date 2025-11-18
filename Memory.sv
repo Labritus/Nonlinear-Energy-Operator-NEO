@@ -7,8 +7,8 @@ module Memory #(
     input logic Clk,
     input logic reset,
     input logic signed [N-1:0] wdata,
-    input logic [$clog2(M)-1:0] raddr,
-    input logic [$clog2(M)-1:0] waddr,
+    input logic [$clog2(M):0] raddr,
+    input logic [$clog2(M):0] waddr,
     output logic signed [N-1:0] rdata
 );
 
@@ -20,17 +20,22 @@ always_ff @(posedge Clk, negedge reset) begin
         for (int i = 0; i < M; i++) begin
             mem[i] <= '0;
         end
-        wdata_buffer = '0;
+        rdata <= '0;
+
     end else begin
          // Write data to memory only if waddr != 0 or wdata != 0
-        if (!(waddr == 0 && wdata == 0)) begin
+        if (!(waddr == 0 && wdata == 0) && waddr < M) begin
             mem[waddr] <= wdata;
         end
     end
+end
 
 always_ff @(posedge Clk) begin
     // read data from memory
-    rdata <= mem[raddr];
+    if (raddr < M) begin
+        rdata <= mem[raddr];
+    end // rdata
+
 end
 
 endmodule
