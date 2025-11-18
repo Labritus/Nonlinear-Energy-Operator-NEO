@@ -3,7 +3,7 @@ clear; clc; close all;
 %% ==== 参数 ====
 phi = 0; % 相位
 n = 2; % 测试n个周期
-M = 8; % 测试n个周期 M > n * (fs/f) = 2*n
+M = 16; % 测试n个周期 M > n * (fs/f) = 2*n
 
 
 A_list = [1, 2, 3];
