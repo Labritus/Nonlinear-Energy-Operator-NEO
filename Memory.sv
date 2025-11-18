@@ -17,9 +17,7 @@ logic signed [N-1:0] mem [0:M-1];
 always_ff @(posedge Clk, negedge reset) begin
     if (!reset) begin
         // reset Memory to 0
-        for (int i = 0; i < M; i++) begin
-            mem[i] <= '0;
-        end
+        $readmemb("memory_data.txt", mem);
         rdata <= '0;
 
     end else begin
