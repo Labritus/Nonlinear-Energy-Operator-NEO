@@ -7,7 +7,7 @@ timeunit 1ns; timeprecision 10ps;
 logic Clock, reset;
 NEO #(
     .N(16),
-    .M(16)
+    .M(32)
 ) NEO1 (
     .Clk(Clock),
     .reset(reset)
