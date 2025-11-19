@@ -24,7 +24,7 @@ always_ff @(posedge Clk, negedge reset) begin
 
     end else begin
          // Write data to memory only if waddr != 0 or wdata != 0
-        if (!(waddr == 0 && wdata == 0) && waddr < M) begin
+        if (!(waddr == 0 && raddr == 0) && waddr < M) begin
             mem[waddr] <= wdata;
         end
         if (raddr < M) begin

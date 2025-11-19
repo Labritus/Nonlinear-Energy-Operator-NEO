@@ -14,7 +14,7 @@ module NEOcalculator #(
 
 timeunit 1ns; timeprecision 10ps;
 
-logic signed [N-1:0] xn_prev, xn_curr, xn_next;
+logic signed [N-1:0] xn_prev, xn_curr;
 logic [$clog2(M):0] counter;
 
 always_ff @(posedge Clk, negedge reset) begin
@@ -27,7 +27,7 @@ always_ff @(posedge Clk, negedge reset) begin
         // Simple processing: shift data through registers
         
 
-        xn_curr <= xn_next;
+        xn_curr <= rdata;
         xn_prev <= xn_curr;
 
         if (counter == { $clog2(M){1'b1} }) begin
@@ -40,14 +40,13 @@ always_ff @(posedge Clk, negedge reset) begin
 end
 
 always_comb begin
-    xn_next = rdata;
     if (counter >= 1) begin
         waddr = counter - 1;
     end else begin
         waddr = '0;
     end
     raddr = counter;
-    wdata = xn_curr * xn_curr - xn_next * xn_prev;
+    wdata = xn_curr * xn_curr - rdata * xn_prev;
     
 
 

@@ -11,7 +11,7 @@ module NEO #(
 timeunit 1ns; timeprecision 10ps;
 
 logic signed [N-1:0] rdata, wdata;
-logic [$clog2(M):0] raddr, waddr;
+logic [$clog2(M)-1:0] raddr, waddr;
 
 Memory #(
     .N(N),
