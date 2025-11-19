@@ -22,6 +22,7 @@ always_ff @(posedge Clk, negedge reset) begin
         counter <= '0;
         xn_prev <= '0;
         xn_curr <= '0;
+
     end else begin
         // Simple processing: shift data through registers
         

@@ -4,13 +4,13 @@ module NEO_stim;
 
 timeunit 1ns; timeprecision 10ps;
 
-logic Clock, nReset;
-NEOcalculator #(
+logic Clock, reset;
+NEO #(
     .N(16),
     .M(16)
 ) NEO1 (
     .Clk(Clock),
-    .reset(nReset)
+    .reset(reset)
 );
 
 initial begin
@@ -22,12 +22,12 @@ always begin
 end
 
 initial begin
-	nReset = 1;
+	reset = 1;
     @(posedge Clock);
     # 500;
-    nReset = 0;
+    reset = 0;
     # 1000;
-    nReset =1;
+    reset =1;
     @(posedge Clock);   
     repeat(50) @(posedge Clock);
     $stop;
