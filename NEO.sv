@@ -1,4 +1,5 @@
 // module of NEO
+timeunit 1ns; timeprecision 10ps;
 
 module NEO #(
     parameter N = 16,  // N-bits wide
@@ -8,7 +9,7 @@ module NEO #(
     input logic reset
 );
 
-timeunit 1ns; timeprecision 10ps;
+
 
 logic signed [N-1:0] rdata, wdata;
 logic [$clog2(M)-1:0] raddr, waddr;

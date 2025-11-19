@@ -1,8 +1,9 @@
 // NEO stimulus module
+timeunit 1ns; timeprecision 10ps;
 
 module NEO_stim;
 
-timeunit 1ns; timeprecision 10ps;
+
 
 logic Clock, reset;
 NEO #(

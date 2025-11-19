@@ -1,4 +1,5 @@
 // model of Memory
+timeunit 1ns; timeprecision 10ps;
 
 module Memory #(
     parameter N = 16,  // N-bits wide
@@ -12,7 +13,7 @@ module Memory #(
     output logic signed [N-1:0] rdata
 );
 
-timeunit 1ns; timeprecision 10ps;
+
 
 logic signed [N-1:0] mem [0:M-1];
 

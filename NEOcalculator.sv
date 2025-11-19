@@ -1,4 +1,5 @@
 // module of NEOcalculator
+timeunit 1ns; timeprecision 10ps;
 
 module NEOcalculator #(
     parameter N = 16,  // N-bits wide
@@ -12,7 +13,7 @@ module NEOcalculator #(
     output logic signed [N-1:0] wdata
 );
 
-timeunit 1ns; timeprecision 10ps;
+
 
 logic signed [N-1:0] xn_prev, xn_curr;
 logic [$clog2(M):0] counter;
