@@ -7,8 +7,8 @@ module NEOcalculator #(
     input logic Clk,
     input logic reset,
     input logic signed [N-1:0] rdata,
-    output logic [$clog2(M):0] raddr,
-    output logic [$clog2(M):0] waddr,
+    output logic [$clog2(M)-1:0] raddr,
+    output logic [$clog2(M)-1:0] waddr,
     output logic signed [N-1:0] wdata
 );
 
