@@ -50,13 +50,15 @@ for k = 1:3
     end
 
     %% ==== 生成最终 N-bit ====
-    % N-bit = [ 前  N/2 bits = 0  ][ 后 N/2 bits = 补码 ]
+
     
+    bin_str = strings(M,1);
+
 
     for i = 1:M
         lowBits = dec2bin(x_q(i), halfN);    % halfN-bit 补码
         highBits = repmat('0', 1, halfN);     % halfN-bit 0
-        bin_str = strings(M,1);      % 拼成 N-bit 字符串
+        bin_str(i) = string([highBits, lowBits]);
     end
 
     %% ==== 输出 txt 文件 ====
