@@ -27,15 +27,10 @@ always_ff @(posedge Clk, negedge reset) begin
         if (!(waddr == 0 && wdata == 0) && waddr < M) begin
             mem[waddr] <= wdata;
         end
+        if (raddr < M) begin
+            rdata <= mem[raddr];
+        end // rdata
     end
-end
-
-always_ff @(posedge Clk) begin
-    // read data from memory
-    if (raddr < M) begin
-        rdata <= mem[raddr];
-    end // rdata
-
 end
 
 endmodule

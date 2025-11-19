@@ -1,23 +1,22 @@
 // module of NEO
 
-module NEOcalculator #(
+module NEO #(
     parameter N = 16,  // N-bits wide
     parameter M = 16  // M locations
     )(
     input logic Clk,
-    input logic reset,
+    input logic reset
 );
 
 timeunit 1ns; timeprecision 10ps;
 
-logic reset;
 logic signed [N-1:0] rdata, wdata;
 logic [$clog2(M):0] raddr, waddr;
 
 Memory #(
     .N(N),
     .M(M)
-) memory1 (
+) Memory1 (
     .Clk(Clk),
     .reset(reset),
     .wdata(wdata),
@@ -29,7 +28,7 @@ Memory #(
 NEOcalculator #(
     .N(N),
     .M(M)
-) calculator1 (
+) NEOcalculator1 (
     .Clk(Clk),
     .reset(reset),
     .rdata(rdata),
