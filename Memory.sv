@@ -2,7 +2,7 @@
 
 module Memory #(
     parameter N = 16,  // N-bits wide
-    parameter M = 16  // M locations 111
+    parameter M = 32  // M locations 111
     )(
     input logic Clk,
     input logic reset,
