@@ -56,7 +56,7 @@ for k = 1:3
     for i = 1:M
         lowBits = dec2bin(x_q(i), halfN);    % halfN-bit 补码
         highBits = repmat('0', 1, halfN);     % halfN-bit 0
-        bin_str(i) = string([highBits, lowBits]);      % 拼成 N-bit 字符串
+        bin_str = strings(M,1);      % 拼成 N-bit 字符串
     end
 
     %% ==== 输出 txt 文件 ====
