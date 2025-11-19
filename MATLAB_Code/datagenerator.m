@@ -43,22 +43,17 @@ for k = 1:3
     % halfN-bit 的补码范围为 0 ~ 2^halfN - 1
     for i = 1:M
         if x_q(i) < 0
-            x_q(i) = x_q(i) + 2^halfN;
+            x_q(i) = x_q(i) + 2^N;
         else
             x_q(i) = x_q(i);
         end
     end
 
     %% ==== 生成最终 N-bit ====
-
-    
-    bin_str = strings(M,1);
-
-
+    % 生成 N-bit 二进制字符串
+    bin_str = strings(M, 1);
     for i = 1:M
-        lowBits = dec2bin(x_q(i), halfN);    % halfN-bit 补码
-        highBits = repmat('0', 1, halfN);     % halfN-bit 0
-        bin_str(i) = string([highBits, lowBits]);
+        bin_str(i) = dec2bin(x_q(i), N); % 固定 N 位宽
     end
 
     %% ==== 输出 txt 文件 ====
@@ -74,34 +69,32 @@ for k = 1:3
 
     %% ==== 画图 ====
     % ===== 连续波形 =====
-    figure;        % <--- 关键：每次循环重新开一个图窗口
+    %% ==== 画图：连续正弦波 vs 补码离散值 ====
+    % 把补码整数映射回实际幅度值，便于和原波形对比
+    x_q_real = x_q;
+    for ii = 1:M
+        if x_q_real(ii) >= 2^(N-1)
+            x_q_real(ii) = x_q_real(ii) - 2^N;   % 还原成有符号整数
+        end
+    end
+    x_q_real = x_q_real / MAX * Afs;  % 映射回血度范围（与输入一致）
+
+    figure;        % <--- 每组 A,f 开一个新图
     hold on;
 
-    t_cont = linspace(0, t(end), 2000);
-    x_cont = A * sin(2*pi*f*t_cont + phi);
+    % 连续波形（密集采样，用更高分辨率来画更光滑的曲线）
+    t_dense = linspace(0, T, 2000);
+    x_dense = A * sin(2*pi*f*t_dense + phi);
+    plot(t_dense, x_dense, 'LineWidth', 1.5);
 
-    plot(t_cont, x_cont, 'LineWidth', 1.8); 
+    % 离散采样（补码量化后还原的幅值）
+    stem(t, x_q_real, 'filled');
 
-
-    % ===== 量化后离散采样点（反推成有符号 + 映射回实际幅度）=====
-
-    % 反推补码为有符号数
-    x_q_signed = x_q;
-    neg_idx = x_q >= 2^(halfN-1);     % halfN 位补码的符号位为1 → negative
-    x_q_signed(neg_idx) = x_q_signed(neg_idx) - 2^halfN;
-
-    % 映射回真实幅度
-    x_q_float = x_q_signed * (Afs / MAX);
-
-    stem(t, x_q_float, 'filled', 'r', 'LineWidth', 1.2);
-
-    % ===== 图属性 =====
-    title(sprintf("A=%d, f=%d Hz, phi=%d°", A, f, phi));
+    grid on;
     xlabel("Time (s)");
     ylabel("Amplitude");
-    legend("Continuous", "Quantized Sampled");
-    grid on;
-    set(gca, 'FontSize', 12);
+    title(sprintf("A=%d, f=%d Hz — Continuous vs Two's Complement Quantized", A, f));
+    legend("Continuous sine", "Quantized (two's complement)", "Location", "best");
 
 
 

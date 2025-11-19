@@ -10,7 +10,8 @@ module NEOcalculator #(
     input logic signed [N-1:0] rdata,
     output logic [$clog2(M)-1:0] raddr,
     output logic [$clog2(M)-1:0] waddr,
-    output logic signed [N-1:0] wdata
+    output logic signed [N-1:0] wdata,
+    output logic ready
 );
 
 
@@ -23,19 +24,27 @@ always_ff @(posedge Clk, negedge reset) begin
         counter <= '0;
         xn_prev <= '0;
         xn_curr <= '0;
+        ready <= '0;
 
     end else begin
         // Simple processing: shift data through registers
-        
+    xn_curr <= rdata;
+    xn_prev <= xn_curr;   
 
-        xn_curr <= rdata;
-        xn_prev <= xn_curr;
 
-        if (counter == { $clog2(M){1'b1} }) begin
-            counter <= counter;
-        end else begin
-            counter <= counter + 1;
-        end
+    if (counter >= (M + 2)) begin
+        counter <= counter;     // hold
+        ready   <= 1'b0;
+
+    
+    end else if (counter == (M + 1)) begin
+        counter <= counter + 1;
+        ready   <= 1'b1;
+
+
+    end else begin
+        counter <= counter + 1;
+    end
 
     end
 end

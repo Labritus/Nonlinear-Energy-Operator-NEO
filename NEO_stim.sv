@@ -11,7 +11,8 @@ NEO #(
     .M(32)
 ) NEO1 (
     .Clk(Clock),
-    .reset(reset)
+    .reset(reset),
+    .ready(ready)
 );
 
 initial begin

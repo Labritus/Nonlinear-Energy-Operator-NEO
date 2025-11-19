@@ -6,7 +6,8 @@ module NEO #(
     parameter M = 32  // M locations
     )(
     input logic Clk,
-    input logic reset
+    input logic reset,
+    output logic ready
 );
 
 
@@ -35,7 +36,8 @@ NEOcalculator #(
     .rdata(rdata),
     .raddr(raddr),
     .waddr(waddr),
-    .wdata(wdata)
+    .wdata(wdata),
+    .ready(ready)
 );
 
 endmodule 

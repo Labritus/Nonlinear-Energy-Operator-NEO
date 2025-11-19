@@ -30,7 +30,7 @@ always_ff @(posedge Clk, negedge reset) begin
         end
         if (raddr < M) begin
             rdata <= mem[raddr];
-        end // rdata
+        end
     end
 end
 
