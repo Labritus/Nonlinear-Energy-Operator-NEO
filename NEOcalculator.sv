@@ -50,16 +50,19 @@ always_ff @(posedge Clk, negedge reset) begin
 end
 
 always_comb begin
-    if (counter >= 1) begin
-        waddr = counter - 1;
+    if (counter >= 2) begin
+        waddr = counter - 2;
     end else begin
         waddr = '0;
     end
-    raddr = counter;
-    wdata = xn_curr * xn_curr - rdata * xn_prev;
     
+    if (counter >= M-1) begin
+    raddr = M-1;
+    end else begin
+    raddr = counter;
+    end
 
-
+    wdata = xn_curr * xn_curr - rdata * xn_prev;
 end
 
 endmodule
