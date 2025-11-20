@@ -8,12 +8,12 @@ module Memory #(
     input logic Clk,
     input logic reset,
     input logic signed [N-1:0] wdata,
-    input logic [$clog2(M)-1:0] raddr,
-    input logic [$clog2(M)-1:0] waddr,
+    /*(* MARK_DEBUG = "TRUE" *)*/ input logic [$clog2(M)-1:0] raddr,
+    /*(* MARK_DEBUG = "TRUE" *)*/ input logic [$clog2(M)-1:0] waddr,
     output logic signed [N-1:0] rdata
 );
 
-logic signed [N-1:0] mem [0:M-1];
+/*(* ram_style = "block" *)*/ logic signed [N-1:0] mem [0:M-1];
 
 always_ff @(posedge Clk, negedge reset) begin
     if (!reset) begin
